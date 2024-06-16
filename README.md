@@ -178,7 +178,7 @@ While the current version of the application meets initial requirements and goal
 ### Useful resources
 
 - [React Documentation](https://legacy.reactjs.org/docs/getting-started.html) - Official documentation for React.js. It's comprehensive and provides in-depth explanations of React concepts and APIs.
-- [Typescript Documentation] (https://www.typescriptlang.org/docs/) - Official documentation for TypeScript, offering guidance on how to use TypeScript for type-safe JavaScript development.
+- [Typescript Documentation](https://www.typescriptlang.org/docs/) - Official documentation for TypeScript, offering guidance on how to use TypeScript for type-safe JavaScript development.
 - [Markdown documentation](https://www.markdownguide.org/) - Markdown API documentation assist me in implementing the markdown API in my project.
 
 
