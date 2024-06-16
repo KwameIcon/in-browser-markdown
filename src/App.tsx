@@ -4,6 +4,7 @@ import Preview from "./components/preview/preview";
 import IconDocument from './assets/icon-document.svg';
 import IconDarkMode from './assets/icon-dark-mode.svg';
 import IconLightMode from './assets/icon-light-mode.svg';
+import eye from './assets/icon-show-preview.svg';
 import IconMenu from './assets/icon-menu.svg';
 import IconClose from './assets/icon-close.svg';
 import DeleteIcon from './assets/icon-delete.svg';
@@ -27,10 +28,41 @@ function App() {
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [fullPreview, setFullPreview] = useState(false);
 
+  // mobile view states
+  const [hidePreview, setHidePreview] = useState(false);
+  const [hideEditor, setHideEditor] = useState(false);
+
+const handleDeviceWidth = () => {
+    if (window.innerWidth <= 412) {
+      setHidePreview(true);
+      setHideEditor(false)
+    } else {
+      setHidePreview(false);
+    }
+  };
+
   useEffect(() => {
+    // Load documents from localStorage when the component mounts
     const savedDocuments = JSON.parse(localStorage.getItem('documents') || '[]');
     setDocuments(savedDocuments);
-  }, []);
+
+    // Handle the initial device width check
+    handleDeviceWidth();
+
+    // Add event listener for window resize to handle device width changes
+    const handleResize = () => {
+      handleDeviceWidth();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Empty dependency array ensures this effect runs once on mount
+
+
 
   const handleSaveDocument = () => {
     const newDocument: Document = {
@@ -101,7 +133,7 @@ function App() {
   };
 
   return (
-    <StyledApp>
+    <StyledApp className= {backgroundColorMode}>
       {/* Left sidebar */}
       <div className={`left-sidebar ${isSidebarActive ? 'active' : ''}`}>
         <h1>My Documents</h1>
@@ -169,10 +201,12 @@ function App() {
         </div>
       </div>
 
+      <img src= {eye} alt=""  className="showFullPreview" onClick={() => {setFullPreview(prev => !prev); setHidePreview(prev => !prev); setHideEditor(prev => !prev)}}/>
+
       {/* Markdown editor */}
       <section className={`markedown-editor ${isSidebarActive ? 'moveLeft' : ''}`} id={backgroundColorMode}>
-        <Editor fullPreview = {fullPreview} markdown={markdown} setMarkdown={setMarkdown} backgroundColorMode={backgroundColorMode} />
-        <Preview fullPreview = {fullPreview} setFullPreview = {setFullPreview} markdown={markdown} backgroundColorMode={backgroundColorMode} />
+        {hideEditor === false && <Editor fullPreview = {fullPreview} markdown={markdown} setMarkdown={setMarkdown} backgroundColorMode={backgroundColorMode} />}
+        {hidePreview === false && <Preview fullPreview = {fullPreview} setFullPreview = {setFullPreview} markdown={markdown} backgroundColorMode={backgroundColorMode} />}
       </section>
 
       {/* Toast for delete confirmation */}
