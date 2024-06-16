@@ -14,6 +14,7 @@ export const StyledEditor = styled.section`
     @media screen and (max-width: 412px) {
         width: 100%;
         height: 100%;
+        border: none;
     }
 
     & > div{
